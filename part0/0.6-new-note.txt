@@ -1,0 +1,9 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: {"message":"note created"}
+
+note over browser:
+browser starts executing js-code
+that post a new note to server and 
+requests JSON data from the server
+without redirecting
+end note
