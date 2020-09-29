@@ -8,10 +8,11 @@ const App = () => {
   const [filterCountry, setFilterCountry] = useState('')
   const [showCountry, setShowCountry] = useState(false)
   const [country, setCountry] = useState({})
-
   const hook = () => {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then(res => setCountires(res.data))
+      .then(data => console.log(data))
+
   }
 
   useEffect(hook, [])
@@ -37,13 +38,13 @@ const App = () => {
         </div>
       }
       {countriesToShow.length > 1 && countriesToShow.length <= 10 && showCountry === true &&
-        <Country countriesToShow={country} />
+        <Country country={country} />
       }
       {countriesToShow.length > 10 &&
         <div>Too many matches, specify another filter</div>
       }
       {countriesToShow.length === 1 &&
-        <Country countriesToShow={countriesToShow[0]} />
+        <Country country={countriesToShow[0]} />
       }
     </>
   );
