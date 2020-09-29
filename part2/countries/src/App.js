@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const App = () => {
-
   const [countries, setCountires] = useState([])
   const [filterCountry, setFilterCountry] = useState('')
 
