@@ -12,7 +12,7 @@ const App = () => {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then(res => setCountires(res.data))
       .then(data => console.log(data))
-
+      
   }
 
   useEffect(hook, [])
