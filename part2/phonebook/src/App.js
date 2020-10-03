@@ -17,12 +17,13 @@ const App = () => {
     console.log('button clicked', e.target)
     if (newName === '' || newNumber === '') return
     const alreadyAdd = persons.find(person => newName.trim() === person.name)
-    console.log('already', alreadyAdd)
+    console.log(alreadyAdd)
     alreadyAdd === undefined ?
       addPerson(newName, newNumber)
       // setPersons([...persons, { name: newName, number: newNumber }])
       :
-      alert(`${newName} is already added to phonebook`)
+      // alert(`${newName} is already added to phonebook`)
+      updatePerson(alreadyAdd.id)
     setNewName('')
     setNewNumber('')
   }
@@ -34,6 +35,19 @@ const App = () => {
       .then(addPerson => {
         setPersons(persons.concat(addPerson))
       })
+  }
+
+  const updatePerson = id => {
+    const alreadyAddedPerson = persons.find(person => person.id === id)
+    const updatePerson = { ...alreadyAddedPerson, number: newNumber }
+    console.log('update',updatePerson)
+    window.confirm(`${alreadyAddedPerson.name} is already added, replace the old number with the new one?`) &&
+      service
+        .update(id, updatePerson)
+        .then(returnPerson => {
+          console.log('return valure', returnPerson)
+          setPersons(persons.map(person => person.id !== id ? person: returnPerson))
+        })
   }
 
   const handleNameChange = (e) => {
