@@ -1,3 +1,3 @@
 import React from 'react';
-const Persons = ({ personsToShow }) => <>{personsToShow.map(person => <div key={person.id}> {person.name} {person.number}</div>)} </>
+const Persons = ({ person, onDelete }) => <><div> {person.name} {person.number} <button onClick = {()=> onDelete(person.id)}>delete</button></div></>
 export default Persons

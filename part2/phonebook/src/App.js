@@ -17,7 +17,7 @@ const App = () => {
     console.log('button clicked', e.target)
     if (newName === '' || newNumber === '') return
     const alreadyAdd = persons.find(person => newName.trim() === person.name)
-    console.log('already',alreadyAdd)
+    console.log('already', alreadyAdd)
     alreadyAdd === undefined ?
       addPerson(newName, newNumber)
       // setPersons([...persons, { name: newName, number: newNumber }])
@@ -28,7 +28,7 @@ const App = () => {
   }
 
   const addPerson = (newName, newNumber) => {
-    const newObj = {id : persons.length +1 ,name: newName, number: newNumber}
+    const newObj = { name: newName, number: newNumber }
     service
       .create(newObj)
       .then(addPerson => {
@@ -59,6 +59,18 @@ const App = () => {
       })
   }, [])
 
+  const onDelete = id => {
+    const deletePerson = persons.find(person => id === person.id)
+    const isDeleted = window.confirm(`Delted ${deletePerson.name}?`)
+    const afterDeleted = persons.filter(person => id !== person.id)
+    if (!isDeleted) return
+    service
+      .deletePerson(id)
+      .then(res => {
+        setPersons(afterDeleted)
+      })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -70,7 +82,9 @@ const App = () => {
         handlePhoneChange={handlePhoneChange}
         newName={newName} newNumber={newNumber} />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      {
+        personsToShow.map(person => <Persons person={person} key={person.id} onDelete={() => onDelete(person.id)} />)
+      }
     </div>
   )
 }

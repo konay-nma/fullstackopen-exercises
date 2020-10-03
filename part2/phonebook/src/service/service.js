@@ -13,7 +13,7 @@ const create = newObj => {
 }
 
 const deletePerson = id => {
-    const request = axios.delete(url, id)
+    const request = axios.delete(`${url}/${id}`)
     return request.then(res => res.data)
 }
 
