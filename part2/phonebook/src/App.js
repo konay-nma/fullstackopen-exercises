@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import axios from 'axios';
-
 import Filter from './component/Filter';
 import PersonForm from './component/PersonForm';
 import Persons from './component/Persons';
 
+import service from './service/service';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -18,14 +17,25 @@ const App = () => {
     console.log('button clicked', e.target)
     if (newName === '' || newNumber === '') return
     const alreadyAdd = persons.find(person => newName.trim() === person.name)
-    console.log(alreadyAdd)
+    console.log('already',alreadyAdd)
     alreadyAdd === undefined ?
-      setPersons([...persons, { name: newName, number: newNumber }])
+      addPerson(newName, newNumber)
+      // setPersons([...persons, { name: newName, number: newNumber }])
       :
       alert(`${newName} is already added to phonebook`)
     setNewName('')
     setNewNumber('')
   }
+
+  const addPerson = (newName, newNumber) => {
+    const newObj = {id : persons.length +1 ,name: newName, number: newNumber}
+    service
+      .create(newObj)
+      .then(addPerson => {
+        setPersons(persons.concat(addPerson))
+      })
+  }
+
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
@@ -41,25 +51,26 @@ const App = () => {
   const personsToShow = filter === '' ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter))
 
-  useEffect(() =>{
-    axios.get('http://localhost:3001/persons')
-         .then(res => {
-           setPersons(res.data)
-         })
-  },[])
+  useEffect(() => {
+    service
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter handleFilterChange = {handleFilterChange} />
+      <Filter handleFilterChange={handleFilterChange} />
       <h3>add new</h3>
-      <PersonForm 
-        handleSubmit = {handleSubmit}
-        handleNameChange = {handleNameChange}
-        handlePhoneChange = {handlePhoneChange} 
-        newName = {newName} newNumber = {newNumber} />
+      <PersonForm
+        handleSubmit={handleSubmit}
+        handleNameChange={handleNameChange}
+        handlePhoneChange={handlePhoneChange}
+        newName={newName} newNumber={newNumber} />
       <h2>Numbers</h2>
-      <Persons personsToShow = {personsToShow} />
+      <Persons personsToShow={personsToShow} />
     </div>
   )
 }
