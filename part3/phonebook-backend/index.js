@@ -25,6 +25,15 @@ let persons = [
     },
 ]
 
+const generateID = () => {
+    let randID;
+    do {
+        randID = Math.floor(Math.random() * 1000)
+    } while (persons.map(person => person.id).includes(randID));
+
+    return randID
+}
+
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
@@ -35,6 +44,34 @@ app.get('/info', (req, res) => {
         <p>Phonebook has info for ${persons.length} people</p>
         <p>${date}</p>
     `)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+    if (!person) return res.status(404).end()
+    res.json(person)
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    persons = persons.filter(person => person.id !== id)
+    res.status(204).end()
+})
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+    //const person = persons.find(person => person.name === body.name)
+    if(!body.name || !body.number) return res.status(404).json({error: 'name or number is missing'})
+    if (!body) return res.status(404).json({ error: 'content missing' })
+    const person = {
+        id: generateID(),
+        name: body.name,
+        number: body.number
+    }
+    if (persons.find(person => person.name === body.name)) return res.status(404).json({error: 'name must be unique'})
+    persons = persons.concat(person)
+    res.json(person)
 })
 
 const PORT = 3001
