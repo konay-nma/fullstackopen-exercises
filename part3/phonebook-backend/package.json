@@ -4,14 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf build && cd /home/konay/react/fullstackopen-exercises/part2/phonebook && npm run build --prod && cp -r build /home/konay/react/fullstackopen-exercises/part3/phonebook-backend",
+    "deploy": "git push heroku master ",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
+    "log:prod": "heroku logs -tail",
+
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+
   "author": "konay",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

@@ -1,7 +1,19 @@
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
+
 app.use(express.json())
 
+app.use(express.static('build'))
+//using a predified formaet string
+//app.use(morgan('tiny'))
+morgan.token('data', (req, res) => {
+    if(req.method == 'POST') return JSON.stringify(req.body)
+    return ''
+})
+morgan.token('type', req => req.headers['content-type'])
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data :type' ))
 let persons = [
     {
         id: 1,
@@ -33,6 +45,11 @@ const generateID = () => {
 
     return randID
 }
+
+
+app.get('/', (req,res) => {
+    res.send('<h1>Hello World</h1> this is backend for phonebook')
+})
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
@@ -74,7 +91,19 @@ app.post('/api/persons', (req, res) => {
     res.json(person)
 })
 
-const PORT = 3001
+app.put('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+    if (!person) return res.status(404).end()
+    persons = persons.filter(person => person.id !== id)
+    const body = req.body
+    if (!body) return res.status(404).json({error : 'info missing'})
+    persons.concat(body)
+    res.json(body)
+})
+
+
+const PORT = process.env.PORT ||3001
 app.listen(PORT, () => {
     console.log(`running server on port ${PORT}`)
 })

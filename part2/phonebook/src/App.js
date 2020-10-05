@@ -42,7 +42,6 @@ const App = () => {
         nullMessage()
       })
       .catch(err => {
-        setErrorMessage(err)
         nullError()
       })
   }
