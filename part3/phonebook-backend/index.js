@@ -92,26 +92,30 @@ app.delete('/api/persons/:id', (req, res) => {
         })
 })
 
-app.post('/api/persons', (req,res,next) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
     //const person = persons.find(person => person.name === body.name)
-    if (!body.name || !body.number) return res.status(404).json({ error: 'name or number is missing' })
+    //if (!body.name || !body.number) return res.status(404).json({ error: 'name or number is missing' })
     const person = new Person({
         name: body.name,
         number: body.number
     })
-    person.save().then(returnedPerson => {
-        res.json(returnedPerson)
-    })
+    person.save()
+        .then(returnedPerson => {
+            res.json(returnedPerson)
+        })
+        .catch(error => {
+            next(error)
+        })
 })
 
-app.put('/api/persons/:id', (req, res,next) => {
+app.put('/api/persons/:id', (req, res, next) => {
     const body = req.body
     const person = {
         name: body.name,
         number: body.number
     }
-    Person.findByIdAndUpdate(req.params.id, person, {new: true})
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
         .then(updatePerson => {
             res.json(updatePerson)
         })
@@ -122,14 +126,16 @@ app.put('/api/persons/:id', (req, res,next) => {
 
 const unknownEndpoint = (req, res) => {
     res.status(404).send({ error: 'unknown endpoint' })
-  }
-  
-  // handle of req with unkonwn endpint
-  app.use(unknownEndpoint) // call after res
+}
 
-const errorHandler = (error,req,res,next) => {
+// handle of req with unkonwn endpint
+app.use(unknownEndpoint) // call after res
+
+const errorHandler = (error, req, res, next) => {
     if (error.name === 'CastError') {
-        res.status(400).send({error: 'malformated id'})
+        res.status(400).send({ error: 'malformated id' })
+    }else if (error.name === 'ValidationError') {
+        res.status(400).json({error: error.message})
     }
     next(error)
 }
