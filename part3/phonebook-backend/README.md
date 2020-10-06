@@ -1,4 +1,5 @@
 ### Fullstack phonebook Web link
-https://cryptic-beyond-23545.herokuapp.com/
 
-api link -> https://cryptic-beyond-23545.herokuapp.com/api/persons
+web -> https://fierce-plains-92325.herokuapp.com/
+
+api link -> https://fierce-plains-92325.herokuapp.com/api/persons
