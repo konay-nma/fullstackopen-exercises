@@ -41,7 +41,9 @@ const App = () => {
         setMessage(`${addPerson.name} is successfully added`)
         nullMessage()
       })
-      .catch(err => {
+      .catch(error => {
+        console.log(error.response.data)
+        setErrorMessage(error.response.data)
         nullError()
       })
   }

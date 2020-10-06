@@ -2,7 +2,7 @@ import React from 'react'
 const Notifications = ({ errorMessage, message }) => {
     if (errorMessage !== null) {
         return (
-            <div className="error">{errorMessage}</div>
+            <div className="error">{errorMessage.error}</div>
         )
     } else if (message !== null) {
         return (
