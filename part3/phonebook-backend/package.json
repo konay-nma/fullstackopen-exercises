@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "/",
   "scripts": {
     "build:ui": "rm -rf build && cd /home/konay/react/fullstackopen-exercises/part2/phonebook && npm run build --prod && cp -r build /home/konay/react/fullstackopen-exercises/part3/phonebook-backend",
     "deploy": "git push heroku master ",
@@ -10,7 +11,9 @@
     "log:prod": "heroku logs -tail",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+
+    "lint": "eslint ."
   },
   "author": "konay",
   "license": "ISC",
@@ -22,6 +25,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.10.0",
     "nodemon": "^2.0.4"
   }
 }
