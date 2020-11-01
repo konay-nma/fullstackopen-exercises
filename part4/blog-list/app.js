@@ -7,6 +7,8 @@ const blogRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
 
 logger.info('connecting to MongoDB', config.MONGODB_URI)
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
@@ -26,7 +28,14 @@ app.get('/', (req, res) => {
     '<h1> hello, world This is blog api backend </h1>'
   )
 })
+
+//beforRoute
+app.use(middleware.tokenExtractor)
+
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
+
 
 app.use(middleware.unknownEndPoint)
 app.use(middleware.errorHandler)

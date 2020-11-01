@@ -5,6 +5,8 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmF5IiwiaWQiOiI1ZjllMjZkM2M5ZDY0YTViMDY0MWRhZTAiLCJpYXQiOjE2MDQyMDU1MTd9.vuof6roXhTIvPAn_a6MQlhshuCei2TKVW_V9_ogBU8o'
+
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
@@ -38,7 +40,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of blogs', () => {
-    test(' succeeds with status code when a valid blog is added', async () => {
+    test('succeeds with status code when a valid blog is added', async () => {
       const newBlog = {
         title: 'React patterns Modified',
         author: 'Michael Chan',
@@ -47,6 +49,7 @@ describe('when there is initially some blogs saved', () => {
       }
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
